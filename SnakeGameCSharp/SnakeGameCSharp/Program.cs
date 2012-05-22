@@ -10,7 +10,7 @@ namespace SnakeGameCSharp
         /// </summary>
         static void Main(string[] args)
         {
-            using (SnakeGame game = new SnakeGame())
+            using (Game game = new Game())
             {
                 game.Run();
 
