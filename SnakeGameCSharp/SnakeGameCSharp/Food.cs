@@ -54,18 +54,18 @@ namespace SnakeGameCSharp
 
         private void CheckFoodSnakeCollision(BoundingBox snakehead)
         {
-            BoundingBox BBFood = new BoundingBox(new Vector3(_location.X + 1, _location.Y + 1, 0),
-                                                 new Vector3(_location.X + 9, _location.Y + 9, 0));
+            //BoundingBox BBFood = new BoundingBox(new Vector3(_location.X + 1, _location.Y + 1, 0),
+            //                                     new Vector3(_location.X + 9, _location.Y + 9, 0));
 
             
             
-            if (snakehead.Intersects(BBFood))
-            {
-                SnakeLength += 1;
-                Snake[SnakeLength].position = Snake[SnakeLength - 1].position;
-                Snake[SnakeLength].facing = Snake[SnakeLength - 1].facing;
-                RandomVector(ref Food);
-            }
+            //if (snakehead.Intersects(BBFood))
+            //{
+            //    SnakeLength += 1;
+            //    Snake[SnakeLength].position = Snake[SnakeLength - 1].position;
+            //    Snake[SnakeLength].facing = Snake[SnakeLength - 1].facing;
+            //    RandomVector(ref Food);
+            //}
 
             ///TODO: check for wall collions against the snake
 

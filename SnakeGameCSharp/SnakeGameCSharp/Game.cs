@@ -49,7 +49,7 @@ namespace SnakeGameCSharp
        
 
         
-        MonsterPart Monster;
+        //MonsterPart Monster;
         //Labels[] label = new Labels[7];
 
         
@@ -60,6 +60,17 @@ namespace SnakeGameCSharp
         public Vector2 MonsterXSpeed = new Vector2(10,0);
         public Vector2 MonsterYSpeed = new Vector2(0, 10);
         Random random = new Random();
+
+        Label LControls;
+        Label LRestart;
+        Label LPause;
+        Label LArrow;
+        Label LMovement;
+
+        Vector2 textCenter;
+        Label LGameOver;
+        Label LPaused;
+
 
         GameObject topWall;
         GameObject bottomWall;
@@ -164,8 +175,8 @@ namespace SnakeGameCSharp
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            SnakeTexture = Content.Load<Texture2D>("snakepart");
-            SnakeHead = Content.Load<Texture2D>("snakehead");
+            //SnakeTexture = Content.Load<Texture2D>("snakepart");
+            //SnakeHead = Content.Load<Texture2D>("snakehead");
             MonsterTexture = Content.Load<Texture2D>("monster");
             FoodTexture = Content.Load<Texture2D>("food");
             ControlFont = Content.Load<SpriteFont>("Courier New");
@@ -178,20 +189,23 @@ namespace SnakeGameCSharp
             rightWall = new GameObject(VWallTexture, new Vector2(600 - VWallTexture.Width,0 ));
 
 
-            Label LControls = new Label(new Vector2(610, (10 + (15 * 1))),"Controls:",ControlFont);
-            Label LRestart = new Label(new Vector2(610, (10 + (15 * 2))),"R-Restart",ControlFont);
-            Label LPause = new Label(new Vector2(610, (10 + (15 * 3))),"P-Pause",ControlFont);
-            Label LArrow = new Label(new Vector2(610, (10 + (15 * 4))),"Arrow Keys:",ControlFont);
-            Label LMovement = new Label(new Vector2(610, (10 + (15 * 5))),"Movement",ControlFont);
-            //label[0].text = "Controls";
+
+
+            LControls = new Label(new Vector2(610, (10 + (15 * 1))), "Controls:", ControlFont);
+            LRestart = new Label(new Vector2(610, (10 + (15 * 2))), "R-Restart", ControlFont);
+            LPause = new Label(new Vector2(610, (10 + (15 * 3))), "P-Pause", ControlFont);
+            LArrow = new Label(new Vector2(610, (10 + (15 * 4))), "Arrow Keys:", ControlFont);
+            LMovement = new Label(new Vector2(610, (10 + (15 * 5))), "Movement", ControlFont);
+
+            textCenter = new Vector2(GraphicsDevice.Viewport.Width / 2, 50f);
+            LGameOver = new Label((textCenter - (LargeFont.MeasureString("GAME OVER") / 2)), "GAME OVER", LargeFont, false, Color.Crimson);
+            LPaused = new Label((textCenter - (LargeFont.MeasureString("PAUSED") / 2)), "PAUSED", LargeFont, false, Color.Crimson);
+   //label[0].text = "Controls";
             //label[1].text = "R-Restart";
             //label[2].text = "P-Pause";
             //label[3].text = "Arrow Keys:";
             //label[4].text = "Movement";
-            Vector2 textCenter = new Vector2(GraphicsDevice.Viewport.Width / 2, 50f);
-            Label LGameOver = new Label ((textCenter - (LargeFont.MeasureString("GAME OVER") / 2)),"GAME OVER",LargeFont,false,Color.Crimson);
-            Label LPaused= new Label ((textCenter - (LargeFont.MeasureString("PAUSED") / 2)),"PAUSED",LargeFont,false,Color.Crimson);
-
+            
             //label[5].color = Color.Crimson;
             //label[5].text = "GAME OVER";
             
@@ -233,7 +247,7 @@ namespace SnakeGameCSharp
             //    if (!paused)
             //    {
             
-            UpdateText();
+            //UpdateText();
             //    UpdateInput();
                 
                 
@@ -276,7 +290,7 @@ namespace SnakeGameCSharp
 
                 base.Update(gameTime);
             } 
-        }
+        
         
 
         //private void BeginPause(bool UserInitiated)
@@ -296,31 +310,31 @@ namespace SnakeGameCSharp
         //    paused = false;
         //    label[6].visible = false;
         //}
-        private void UpdateText()
-        {
-            if (first == true)
-            {
-                label[0].text = "Controls";
-                label[1].text = "R-Restart";
-                label[2].text = "P-Pause";
-                label[3].text = "Arrow Keys:";
-                label[4].text = "Movement";
+        //private void UpdateText()
+        //{
+        //    if (first == true)
+        //    {
+        //        label[0].text = "Controls";
+        //        label[1].text = "R-Restart";
+        //        label[2].text = "P-Pause";
+        //        label[3].text = "Arrow Keys:";
+        //        label[4].text = "Movement";
 
-            label[5].color = Color.Crimson;
-            label[5].text = "GAME OVER";
+        //    label[5].color = Color.Crimson;
+        //    label[5].text = "GAME OVER";
 
-            Vector2 textSize = LargeFont.MeasureString("GAME OVER");
-            Vector2 textCenter = new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2);
-            label[5].vector = textCenter - (textSize / 2);
-            label[5].visible = false;
-            textSize = LargeFont.MeasureString("PAUSED");
-            label[6].vector = textCenter - (textSize / 2);
-            label[6].text = "PAUSED";
-            label[6].color = Color.Crimson;
-            label[6].visible = false;
-            first = false;
-            }
-        }
+        //    Vector2 textSize = LargeFont.MeasureString("GAME OVER");
+        //    Vector2 textCenter = new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2);
+        //    label[5].vector = textCenter - (textSize / 2);
+        //    label[5].visible = false;
+        //    textSize = LargeFont.MeasureString("PAUSED");
+        //    label[6].vector = textCenter - (textSize / 2);
+        //    label[6].text = "PAUSED";
+        //    label[6].color = Color.Crimson;
+        //    label[6].visible = false;
+        //    first = false;
+        //    }
+        //}
         //private void CheckPause()
         //{
         //    KeyboardState newState = Keyboard.GetState();
@@ -493,6 +507,7 @@ namespace SnakeGameCSharp
         //    ///TODO: check for wall collions against the snake
 
         //}
+        
         private void CheckSnakeMonsterCollision()
         {
             ///TODO: check for wall collions against the snake
@@ -510,28 +525,36 @@ namespace SnakeGameCSharp
             bottomWall.Draw(spriteBatch);
             leftWall.Draw(spriteBatch);
             rightWall.Draw(spriteBatch);
+            
+           
+            //for (int i = 0; i <= label.Length-1; i++)
+            //{
+            //    if (label[i].visible == true)
+            //    {
+            //        if (i==5 || i==6)
+            //        spriteBatch.DrawString(LargeFont, label[i].text, label[i].vector, label[i].color);
+            //            else
+            //        spriteBatch.DrawString(ControlFont, label[i].text, label[i].vector, label[i].color);
+            //    }
 
-            for (int i = 0; i <= label.Length-1; i++)
-            {
-                if (label[i].visible == true)
-                {
-                    if (i==5 || i==6)
-                    spriteBatch.DrawString(LargeFont, label[i].text, label[i].vector, label[i].color);
-                        else
-                    spriteBatch.DrawString(ControlFont, label[i].text, label[i].vector, label[i].color);
-                }
-
-            }
-            for (int i = 0; i <= SnakeLength - 1; i++)
-            {
-                if (i==0)
-                    spriteBatch.Draw(SnakeHead, Snake[i].position, Color.Transparent);
-                else
-                    spriteBatch.Draw(SnakeTexture, Snake[i].position, Color.White);
-            }
-            //spriteBatch.Draw(MonsterTexture, Monster.position, Color.Black);
-            spriteBatch.Draw(FoodTexture, Food, Color.White);
-            spriteBatch.Draw(SnakeHead, Snake[0].position,Color.White);
+            //}
+            LControls.Draw(spriteBatch);
+            LRestart.Draw(spriteBatch);
+            LPause.Draw(spriteBatch);
+            LArrow.Draw(spriteBatch);
+            LMovement.Draw(spriteBatch);
+            LGameOver.Draw(spriteBatch);
+            LPaused.Draw(spriteBatch);
+            //for (int i = 0; i <= SnakeLength - 1; i++)
+            //{
+            //    if (i==0)
+            //        spriteBatch.Draw(SnakeHead, Snake[i].position, Color.Transparent);
+            //    else
+            //        spriteBatch.Draw(SnakeTexture, Snake[i].position, Color.White);
+            //}
+            ////spriteBatch.Draw(MonsterTexture, Monster.position, Color.Black);
+            //spriteBatch.Draw(FoodTexture, Food, Color.White);
+            //spriteBatch.Draw(SnakeHead, Snake[0].position,Color.White);
             spriteBatch.End();
             // TODO: Add your drawing code here
             //TargetElapsedTime = new TimeSpan(0, 0, 0, 0, 90);

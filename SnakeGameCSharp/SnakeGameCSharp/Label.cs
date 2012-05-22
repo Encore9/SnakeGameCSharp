@@ -14,11 +14,11 @@ namespace SnakeGameCSharp
 {
     public class Label
     {
-        internal Vector2 _vector;
-        internal bool _visible;
-        internal string _text;
-        internal Color _color;
-        internal SpriteFont _font;
+        private Vector2 _vector;
+        private bool _visible;
+        private string _text;
+        private Color _color;
+        private SpriteFont _font;
         public Label(Vector2 Vector, string Text,SpriteFont Font, bool Visible, Color Color)
         {
             _vector = Vector;
