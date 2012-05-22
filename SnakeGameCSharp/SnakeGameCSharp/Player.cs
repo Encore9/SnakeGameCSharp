@@ -18,9 +18,9 @@ namespace SnakeGameCSharp
 
         private Texture2D SnakeTexture;
         private Texture2D SnakeHeadTexture;
-        private int SnakeLength = 5;
+        //private int SnakeLength = 5;
         private int Score;
-        //snakePart[] Snake = new snakePart[99];
+        snakePart[] Snake = new snakePart[99];
         private Vector2 SnakeXSpeed = new Vector2(10, 0);
         private Vector2 SnakeYSpeed = new Vector2(0, 10);
         private struct snakePart

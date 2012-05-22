@@ -18,11 +18,11 @@ namespace SnakeGameCSharp
         private BoundingBox _bbox;
         
 
-        public class SnakePart
-        {
+        //public SnakePart()
+        //{
             
             
-        }
+        //}
 
 
     }
