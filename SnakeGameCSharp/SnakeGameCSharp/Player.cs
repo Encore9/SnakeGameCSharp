@@ -85,14 +85,15 @@ namespace SnakeGameCSharp
             walls.Add(Bottom);            
             _Walls.AddRange(walls);
         }
-        public void CheckSnakeFoodCollision(BoundingBox Food)
+        public bool CheckSnakeFoodCollision(BoundingBox Food)
         {
             ///TODO: check for food collisions against the snake
             if (SnakeHead.Intersects(Food))
             {
                 GrowSnake();
+                return true;
             }
-
+            return false;
         }
 
         private void StartUp()
@@ -106,7 +107,7 @@ namespace SnakeGameCSharp
             for (int i = 0; i <= this.SnakeLength - 1; i++)
             {
                 SnakePart part = new SnakePart(new Vector2(120 - (10 * i), 120), 3);
-                _Snake.Add(part);
+                 _Snake.Add(part);
                 //_Snake[i].Position = new Vector2(120 - (10 * i), 120);
                 //_Snake[i].Facing = 3;
             }
@@ -229,7 +230,14 @@ namespace SnakeGameCSharp
             //label[6].visible = false;
         }
         private void MoveSnake()
-        {
+        {        
+            for (int i = this.SnakeLength - 1; i >= 1; i--)
+            {
+                
+                _Snake[i].Position = _Snake[i - 1].Position;
+                _Snake[i].Facing = _Snake[i - 1].Facing;
+
+            }
             if (_Snake[0].Facing == 1)
             {
                 _Snake[0].Position -= _SnakeXSpeed;
@@ -253,18 +261,16 @@ namespace SnakeGameCSharp
             }
 
             
-            for (int i = this.SnakeLength - 1; i >= 1; i--)
-            {
-                _Snake[i].Position = _Snake[i - 1].Position;
-                _Snake[i].Facing = _Snake[i - 1].Facing;
 
-            }
         }
         private void GrowSnake()
         {
+            
+            SnakePart part = new SnakePart(_Snake[this.SnakeLength - 1].Position, _Snake[this.SnakeLength - 1].Facing);
+            _Snake.Add(part);
             this.SnakeLength += 1;
-            _Snake[this.SnakeLength].Position = _Snake[this.SnakeLength - 1].Position;
-            _Snake[this.SnakeLength].Facing = _Snake[this.SnakeLength - 1].Facing;
+            //_Snake[this.SnakeLength].Position = _Snake[this.SnakeLength - 1].Position;
+            //_Snake[this.SnakeLength].Facing = _Snake[this.SnakeLength - 1].Facing;
         }
        
 
@@ -336,9 +342,9 @@ namespace SnakeGameCSharp
             for (int i = 0; i <= this.SnakeLength - 1; i++)
             {
                 if (i == 0)
-                    spriteBatch.Draw(_SnakeHeadTexture, _Snake[i].Position, Color.Transparent);
+                    spriteBatch.Draw(_SnakeHeadTexture, _Snake[i].Position, Color.Blue);
                 else
-                    spriteBatch.Draw(_SnakeBodyTexture, _Snake[i].Position, Color.Transparent);
+                    spriteBatch.Draw(_SnakeBodyTexture, _Snake[i].Position, Color.Red);
             }
         }
     }

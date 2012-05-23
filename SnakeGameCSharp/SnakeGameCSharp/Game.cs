@@ -216,6 +216,7 @@ namespace SnakeGameCSharp
             //label[5].visible = false;
 
             PlayerOne = new Player(SnakeHeadTexture, SnakeBodyTexture, 5);
+            PlayerOne.AddEdges(leftWall.BBox, topWall.BBox, rightWall.BBox, bottomWall.BBox);
             Food = new Food(FoodTexture); 
 
 
@@ -239,7 +240,8 @@ namespace SnakeGameCSharp
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            PlayerOne.CheckSnakeFoodCollision(Food.BBFood);
+            if (PlayerOne.CheckSnakeFoodCollision(Food.BBFood))
+                Food = new Food(FoodTexture);
             PlayerOne.Update(gameTime);
 
             

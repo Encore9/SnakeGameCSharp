@@ -10,7 +10,7 @@ namespace SnakeGameCSharp
         Texture2D _texture;
         public Vector2 _position;
 
-        public BoundingBox BoundingBox
+        public BoundingBox BBox
         {
             get
             {
