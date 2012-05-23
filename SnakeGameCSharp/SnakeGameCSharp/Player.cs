@@ -36,7 +36,7 @@ namespace SnakeGameCSharp
         //BoundingBox BBTopWall = new BoundingBox(new Vector3(1, 1, 0), new Vector3(599, 9, 0));
         //BoundingBox BBRightWall = new BoundingBox(new Vector3(591, 1, 0), new Vector3(599, 599, 0));
         //BoundingBox BBBottomWall = new BoundingBox(new Vector3(1, 591, 0), new Vector3(599, 599, 0));
-        private bool _first = true;
+        
         private bool _dead = false;
         private bool _paused = false;
         //private bool pauseKeyDown = false;
@@ -85,22 +85,13 @@ namespace SnakeGameCSharp
             walls.Add(Bottom);            
             _Walls.AddRange(walls);
         }
-        private void CheckSnakeFoodCollision()
+        private void CheckSnakeFoodCollision(BoundingBox Food)
         {
-            ///TODO: check for wall collions against the snake
-            ///
-            //BoundingBox BBSnake = new BoundingBox(new Vector3(_Snake[0].X + 1, _Snake[0].Y + 1, 0),
-            //                                      new Vector3(_Snake[0].X + 9, _Snake[0].Y + 9, 0));
-            _Walls.ForEach(delegate(BoundingBox CurrentBBOX)
+            ///TODO: check for food collisions against the snake
+            if (SnakeHead.Intersects(Food))
             {
-                if (SnakeHead.Intersects(CurrentBBOX))
-                {
-
-                    _paused = true;
-                    _dead = true;
-
-                }
-            });
+                
+            }
 
         }
 
@@ -108,13 +99,16 @@ namespace SnakeGameCSharp
         {
             _oldState = Keyboard.GetState();
             _dead = false;
-            _first = true;
+            
             EndPause();
-            SnakeLength = 5;
-            for (int i = 0; i <= SnakeLength - 1; i++)
+            this.SnakeLength = this.StartLength;
+
+            for (int i = 0; i <= this.SnakeLength - 1; i++)
             {
-                _Snake[i].Position = new Vector2(120 - (10 * i), 120);
-                _Snake[i].Facing = 3;
+                SnakePart part = new SnakePart(new Vector2(120 - (10 * i), 120), 3);
+                _Snake.Add(part);
+                //_Snake[i].Position = new Vector2(120 - (10 * i), 120);
+                //_Snake[i].Facing = 3;
             }
 
 
@@ -226,7 +220,12 @@ namespace SnakeGameCSharp
 
             }
         }
-
+        private void GrowSnake()
+        {
+            this.SnakeLength += 1;
+            _Snake[this.SnakeLength].Position = _Snake[this.SnakeLength - 1].Position;
+            _Snake[this.SnakeLength].Facing = _Snake[this.SnakeLength - 1].Facing;
+        }
         private void UpdateInput()
         {
             KeyboardState newState = Keyboard.GetState();

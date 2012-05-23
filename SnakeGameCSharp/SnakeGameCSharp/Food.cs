@@ -15,20 +15,12 @@ namespace SnakeGameCSharp
     public class Food
     {
         private Vector2 _location= Vector2.Zero;
-        
+        private Random random = new Random();
         public Food()
         {
-
+            MakeFood(ref _location);
         }
 
-        //public float X()
-        //{
-        //    return _location.X;
-        //}
-        //public float Y()
-        //{
-        //    return _location.Y;
-        //}
         public float X
         {
             get
@@ -51,24 +43,30 @@ namespace SnakeGameCSharp
                 _location.Y = value;
             }
         }
-
-        private void CheckFoodSnakeCollision(BoundingBox snakehead)
+        public BoundingBox BBFood
         {
-            //BoundingBox BBFood = new BoundingBox(new Vector3(_location.X + 1, _location.Y + 1, 0),
-            //                                     new Vector3(_location.X + 9, _location.Y + 9, 0));
-
-            
-            
-            //if (snakehead.Intersects(BBFood))
-            //{
-            //    SnakeLength += 1;
-            //    Snake[SnakeLength].position = Snake[SnakeLength - 1].position;
-            //    Snake[SnakeLength].facing = Snake[SnakeLength - 1].facing;
-            //    RandomVector(ref Food);
-            //}
-
-            ///TODO: check for wall collions against the snake
+            get
+            {
+                BoundingBox BBFood = new BoundingBox(new Vector3(_location.X + 1, _location.Y + 1, 0),
+                                                      new Vector3(_location.X + 9, _location.Y + 9, 0));
+                return BBFood;
+            }
 
         }
+        private Vector2 MakeFood(ref Vector2 Vector)
+        {
+            do
+            {
+                Single RndNum = random.Next(10, 590);
+                Vector.X = (int)RndNum;
+            } while (Vector.X % 10 != 0);
+            do
+            {
+                Single RndNum = random.Next(10, 590);
+                Vector.Y = (int)(int)RndNum;
+            } while (Vector.Y % 10 != 0);
+            return Vector;
+        }
+
     }
 }
