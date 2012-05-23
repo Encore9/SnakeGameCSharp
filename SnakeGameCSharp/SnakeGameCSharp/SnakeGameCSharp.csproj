@@ -73,7 +73,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Food.cs" />
-    <Compile Include="GameObject.cs" />
     <Compile Include="Label.cs" />
     <Compile Include="Monster.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -81,6 +80,7 @@
     <Compile Include="Player.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="SnakePart.cs" />
+    <Compile Include="Wall.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

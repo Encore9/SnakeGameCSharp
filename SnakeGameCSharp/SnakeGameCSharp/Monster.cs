@@ -12,15 +12,15 @@ using Microsoft.Xna.Framework.Media;
 
 namespace SnakeGameCSharp
 {
-    public class Monster
-    {
+    //public class Monster
+    //{
 
-        struct MonsterPart
-        {
+    //    struct MonsterPart
+    //    {
 
-            public Vector2 position;
-            public int facing;
-        };
+    //        public Vector2 position;
+    //        public int facing;
+    //    };
 
-    }
+    //}
 }

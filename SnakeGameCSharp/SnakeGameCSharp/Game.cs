@@ -71,17 +71,17 @@ namespace SnakeGameCSharp
         Label LGameOver;
         Label LPaused;
 
+        
+        Wall topWall;
+        Wall bottomWall;
+        Wall leftWall;
+        Wall rightWall;
 
-        GameObject topWall;
-        GameObject bottomWall;
-        GameObject leftWall;
-        GameObject rightWall;
-
-        bool first = true;
-        bool gameover = false;
-        private bool paused = false;
+        //bool first = true;
+        //bool gameover = false;
+       // private bool paused = false;
        // private bool pauseKeyDown = false;
-        private bool pausedForGuide = false;
+        //private bool pausedForGuide = false;
 
 
         /// <summary>
@@ -183,10 +183,12 @@ namespace SnakeGameCSharp
             LargeFont = Content.Load<SpriteFont>("Large");
             Texture2D HWallTexture = Content.Load<Texture2D>("HWall");
             Texture2D VWallTexture = Content.Load<Texture2D>("VWall");
-            topWall = new GameObject( HWallTexture,Vector2.Zero);
-            bottomWall = new GameObject(HWallTexture,new Vector2(0, 600 - HWallTexture.Height));
-            leftWall = new GameObject(VWallTexture, Vector2.Zero);
-            rightWall = new GameObject(VWallTexture, new Vector2(600 - VWallTexture.Width,0 ));
+
+
+            topWall = new Wall(HWallTexture, Vector2.Zero);
+            bottomWall = new Wall(HWallTexture, new Vector2(0, 600 - HWallTexture.Height));
+            leftWall = new Wall(VWallTexture, Vector2.Zero);
+            rightWall = new Wall(VWallTexture, new Vector2(600 - VWallTexture.Width, 0));
 
 
 

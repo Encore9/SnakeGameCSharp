@@ -14,77 +14,125 @@ namespace SnakeGameCSharp
 {
     public class Player
     {
-        private KeyboardState oldState;
+        
+        private KeyboardState _oldState;
 
-        private Texture2D SnakeTexture;
-        private Texture2D SnakeHeadTexture;
-        //private int SnakeLength = 5;
-        private int Score;
-        snakePart[] Snake = new snakePart[99];
-        private Vector2 SnakeXSpeed = new Vector2(10, 0);
-        private Vector2 SnakeYSpeed = new Vector2(0, 10);
-        private struct snakePart
+        private Texture2D _SnakeBodyTexture;
+        private Texture2D _SnakeHeadTexture;
+        private int _StartLength = 5;
+        private bool _Playerone = true;
+        private int _Score;
+        List<SnakePart> _Snake = new List<SnakePart>();
+        //snakePart[] Snake = new snakePart[99];
+        private Vector2 _SnakeXSpeed = new Vector2(10, 0);
+        private Vector2 _SnakeYSpeed = new Vector2(0, 10);
+        //private struct snakePart
+        //{
+        //    public Vector2 position;
+        //    public int facing;
+        //};
+        List<BoundingBox> _Walls = new List<BoundingBox>();
+        //BoundingBox BBLeftWall = new BoundingBox(new Vector3(1, 1, 0), new Vector3(9, 599, 0));
+        //BoundingBox BBTopWall = new BoundingBox(new Vector3(1, 1, 0), new Vector3(599, 9, 0));
+        //BoundingBox BBRightWall = new BoundingBox(new Vector3(591, 1, 0), new Vector3(599, 599, 0));
+        //BoundingBox BBBottomWall = new BoundingBox(new Vector3(1, 591, 0), new Vector3(599, 599, 0));
+        private bool _first = true;
+        private bool _dead = false;
+        private bool _paused = false;
+        //private bool pauseKeyDown = false;
+        private bool pausedForGuide = false;
+
+
+        public Player(Texture2D SnakeHeadTexture, Texture2D SnakeBodyTexture, int InitialLength)
         {
-            public Vector2 position;
-            public int facing;
-        };
-        BoundingBox BBLeftWall = new BoundingBox(new Vector3(1, 1, 0), new Vector3(9, 599, 0));
-        BoundingBox BBTopWall = new BoundingBox(new Vector3(1, 1, 0), new Vector3(599, 9, 0));
-        BoundingBox BBRightWall = new BoundingBox(new Vector3(591, 1, 0), new Vector3(599, 599, 0));
-        BoundingBox BBBottomWall = new BoundingBox(new Vector3(1, 591, 0), new Vector3(599, 599, 0));
-        internal bool first = true;
-        internal bool gameover = false;
-        internal bool paused = false;
-        //internal bool pauseKeyDown = false;
-        internal bool pausedForGuide = false;
 
-
-        public Player()
-        {
+            _SnakeHeadTexture = SnakeHeadTexture;
+            _SnakeBodyTexture = SnakeBodyTexture;
+            _StartLength = InitialLength;
             StartUp();
             
 
         }
+        public Player(Texture2D SnakeHeadTexture, Texture2D SnakeBodyTexture, int InitialLength,bool PlayerOne)
+        {
+
+            _SnakeHeadTexture = SnakeHeadTexture;
+            _SnakeBodyTexture = SnakeBodyTexture;
+            _StartLength = InitialLength;
+            _Playerone = PlayerOne;
+            StartUp();
+
+
+        }
         public int SnakeLength { get; set; }
+        public int StartLength { get{return _StartLength;}}
         public BoundingBox SnakeHead
         {
             get
             {
-                BoundingBox BBSnake = new BoundingBox(new Vector3(Snake[0].position.X + 1, Snake[0].position.Y + 1, 0),
-                                                      new Vector3(Snake[0].position.X + 9, Snake[0].position.Y + 9, 0));
+                BoundingBox BBSnake = new BoundingBox(new Vector3(_Snake[0].X + 1, _Snake[0].Y + 1, 0),
+                                                      new Vector3(_Snake[0].X + 9, _Snake[0].Y + 9, 0));
                 return BBSnake;
             }
 
         }
+        public void AddEdges(BoundingBox Left, BoundingBox Top, BoundingBox Right, BoundingBox Bottom)
+        {
+            List<BoundingBox> walls= new List<BoundingBox>();
+            walls.Add(Left);
+            walls.Add(Top);
+            walls.Add(Right);
+            walls.Add(Bottom);            
+            _Walls.AddRange(walls);
+        }
+        private void CheckSnakeFoodCollision()
+        {
+            ///TODO: check for wall collions against the snake
+            ///
+            //BoundingBox BBSnake = new BoundingBox(new Vector3(_Snake[0].X + 1, _Snake[0].Y + 1, 0),
+            //                                      new Vector3(_Snake[0].X + 9, _Snake[0].Y + 9, 0));
+            _Walls.ForEach(delegate(BoundingBox CurrentBBOX)
+            {
+                if (SnakeHead.Intersects(CurrentBBOX))
+                {
+
+                    _paused = true;
+                    _dead = true;
+
+                }
+            });
+
+        }
+
         private void StartUp()
         {
-            oldState = Keyboard.GetState();
-            gameover = false;
-            first = true;
+            _oldState = Keyboard.GetState();
+            _dead = false;
+            _first = true;
             EndPause();
             SnakeLength = 5;
             for (int i = 0; i <= SnakeLength - 1; i++)
             {
-                Snake[i].position = new Vector2(120 - (10 * i), 120);
-                Snake[i].facing = 3;
+                _Snake[i].Position = new Vector2(120 - (10 * i), 120);
+                _Snake[i].Facing = 3;
             }
 
 
-            paused = false;
+            _paused = false;
             //pauseKeyDown = false;
             pausedForGuide = false;
 
         }
 
-        internal void Update(GameTime gameTime)
+        private void Update(GameTime gameTime)
         {
             CheckRestart();
-            if (!gameover)
+            if (!_dead)
             {
                 CheckPause();
                 CheckSnakeWallCollision();
                 //CheckSnakeFoodCollision();
-                if (!paused)
+                if (!_paused)
                 {
 
 
@@ -100,9 +148,9 @@ namespace SnakeGameCSharp
             if (newState.IsKeyDown(Keys.P))
             {
                 // If not down last update, key has just been pressed.
-                if (!oldState.IsKeyDown(Keys.P))
+                if (!_oldState.IsKeyDown(Keys.P))
                 {
-                    if (!paused)
+                    if (!_paused)
                         BeginPause(true);
                     else
                         EndPause();
@@ -122,7 +170,7 @@ namespace SnakeGameCSharp
             if (newState.IsKeyDown(Keys.R))
             {
                 // If not down last update, key has just been pressed.
-                if (!oldState.IsKeyDown(Keys.R))
+                if (!_oldState.IsKeyDown(Keys.R))
                 {
 
                     StartUp();
@@ -131,7 +179,7 @@ namespace SnakeGameCSharp
         }
         private void BeginPause(bool UserInitiated)
         {
-            paused = true;
+            _paused = true;
             pausedForGuide = !UserInitiated;
             //label[6].visible = true;
 
@@ -143,37 +191,38 @@ namespace SnakeGameCSharp
             //TODO: Resume audio
             //TODO: Resume controller vibration
             pausedForGuide = false;
-            paused = false;
+            _paused = false;
             //label[6].visible = false;
         }
-        internal void MoveSnake()
+        private void MoveSnake()
         {
-            if (Snake[0].facing == 1)
+            if (_Snake[0].Facing == 1)
             {
-                Snake[0].position -= SnakeXSpeed;
+                _Snake[0].Position -= _SnakeXSpeed;
 
             }
-            else if (Snake[0].facing == 2)
+            else if (_Snake[0].Facing == 2)
             {
-                Snake[0].position -= SnakeYSpeed;
+                _Snake[0].Position -= _SnakeYSpeed;
 
             }
-            else if (Snake[0].facing == 3)
+            else if (_Snake[0].Facing == 3)
             {
-                Snake[0].position += SnakeXSpeed;
+                _Snake[0].Position += _SnakeXSpeed;
 
             }
-            else if (Snake[0].facing == 4)
+            else if (_Snake[0].Facing == 4)
             {
-                Snake[0].position += SnakeYSpeed;
+                _Snake[0].Position += _SnakeYSpeed;
 
 
             }
 
-            for (int i = SnakeLength - 1; i >= 1; i--)
+            
+            for (int i = _Snake.Count - 1; i >= 1; i--)
             {
-                Snake[i].position = Snake[i - 1].position;
-                Snake[i].facing = Snake[i - 1].facing;
+                _Snake[i].Position = _Snake[i - 1].Position;
+                _Snake[i].Facing = _Snake[i - 1].Facing;
 
             }
         }
@@ -185,85 +234,95 @@ namespace SnakeGameCSharp
             if (newState.IsKeyDown(Keys.Left))
             {
                 // If not down last update, key has just been pressed.
-                if (!oldState.IsKeyDown(Keys.Left))
+                if (!_oldState.IsKeyDown(Keys.Left))
                 {
-                    Snake[0].facing = 1;//Left
+                    _Snake[0].Facing = 1;//Left
                 }
             } if (newState.IsKeyDown(Keys.Up))
             {
                 // If not down last update, key has just been pressed.
-                if (!oldState.IsKeyDown(Keys.Up))
+                if (!_oldState.IsKeyDown(Keys.Up))
                 {
-                    Snake[0].facing = 2;//Up
+                    _Snake[0].Facing = 2;//Up
                 }
             }
             if (newState.IsKeyDown(Keys.Right))
             {
                 // If not down last update, key has just been pressed.
-                if (!oldState.IsKeyDown(Keys.Right))
+                if (!_oldState.IsKeyDown(Keys.Right))
                 {
-                    Snake[0].facing = 3;//Right
+                    _Snake[0].Facing = 3;//Right
                 }
             }
             if (newState.IsKeyDown(Keys.Down))
             {
                 // If not down last update, key has just been pressed.
-                if (!oldState.IsKeyDown(Keys.Down))
+                if (!_oldState.IsKeyDown(Keys.Down))
                 {
-                    Snake[0].facing = 4;//Down
+                    _Snake[0].Facing = 4;//Down
                 }
             }
-            oldState = newState;
+            _oldState = newState;
         }
 
         private void CheckSnakeWallCollision()
         {
             ///TODO: check for wall collions against the snake
             ///
-            BoundingBox BBSnake = new BoundingBox(new Vector3(Snake[0].position.X + 1, Snake[0].position.Y + 1, 0),
-                                                  new Vector3(Snake[0].position.X + 9, Snake[0].position.Y + 9, 0));
-            switch (Snake[0].facing)
+            //BoundingBox BBSnake = new BoundingBox(new Vector3(_Snake[0].X + 1, _Snake[0].Y + 1, 0),
+            //                                      new Vector3(_Snake[0].X + 9, _Snake[0].Y + 9, 0));
+            _Walls.ForEach(delegate(BoundingBox CurrentBBOX)
             {
-                case 1:
+                if (SnakeHead.Intersects(CurrentBBOX))
+                {
 
-                    if (BBSnake.Intersects(BBLeftWall))
-                    {
+                    _paused = true;
+                    _dead = true;
 
-                        paused = true;
-                        gameover = true;
+                }
+             });
+            //switch (_Snake[0].Facing)
+            //{
+            //    case 1:
 
-                    }
-                    break;
-                case 2:
+            //        if (SnakeHead.Intersects(BBLeftWall))
+            //        {
 
-                    if (BBSnake.Intersects(BBTopWall))
-                    {
+            //            paused = true;
+            //            gameover = true;
 
-                        paused = true;
-                        gameover = true;
-                    }
-                    break;
-                case 3:
+            //        }
+            //        break;
+            //    case 2:
+
+            //        if (SnakeHead.Intersects(BBTopWall))
+            //        {
+
+            //            paused = true;
+            //            gameover = true;
+            //        }
+            //        break;
+            //    case 3:
 
 
-                    if (BBSnake.Intersects(BBRightWall))
-                    {
+            //        if (SnakeHead.Intersects(BBRightWall))
+            //        {
 
-                        paused = true;
-                        gameover = true;
-                    }
-                    break;
-                case 4:
+            //            paused = true;
+            //            gameover = true;
+            //        }
+            //        break;
+            //    case 4:
 
-                    if (BBSnake.Intersects(BBBottomWall))
-                    {
+            //        if (SnakeHead.Intersects(BBBottomWall))
+            //        {
 
-                        paused = true;
-                        gameover = true;
-                    }
-                    break;
+            //            paused = true;
+            //            gameover = true;
+            //        }
+            //        break;
 
-            }
+            //}
 
         }
     }
