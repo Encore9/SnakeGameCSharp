@@ -15,12 +15,17 @@ namespace SnakeGameCSharp
     public class Food
     {
         private Vector2 _location= Vector2.Zero;
+        private Texture2D _texture;
         private Random random = new Random();
-        public Food()
+        public Food(Texture2D FoodTexture)
         {
+            _texture = FoodTexture;
             MakeFood(ref _location);
         }
-
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(_texture, _location, Color.White);
+        }
         public float X
         {
             get

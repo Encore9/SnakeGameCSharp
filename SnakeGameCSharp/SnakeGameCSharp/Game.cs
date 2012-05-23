@@ -25,8 +25,8 @@ namespace SnakeGameCSharp
         
 //        KeyboardState oldState;
 
-//        Texture2D SnakeTexture;
-//        Texture2D SnakeHead;
+        Texture2D SnakeBodyTexture;
+        Texture2D SnakeHeadTexture;
 //int SnakeLength = 5;
 //// int Score = 0;
 //snakePart[] Snake = new snakePart[99];
@@ -44,8 +44,8 @@ namespace SnakeGameCSharp
         Texture2D MonsterTexture;
         Texture2D FoodTexture;
 
-
-        
+        Player PlayerOne;
+        Food Food;
        
 
         
@@ -175,8 +175,8 @@ namespace SnakeGameCSharp
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            //SnakeTexture = Content.Load<Texture2D>("snakepart");
-            //SnakeHead = Content.Load<Texture2D>("snakehead");
+            SnakeBodyTexture = Content.Load<Texture2D>("snakepart");
+            SnakeHeadTexture = Content.Load<Texture2D>("snakehead");
             MonsterTexture = Content.Load<Texture2D>("monster");
             FoodTexture = Content.Load<Texture2D>("food");
             ControlFont = Content.Load<SpriteFont>("Courier New");
@@ -214,7 +214,9 @@ namespace SnakeGameCSharp
 
             //label[5].vector = textCenter - (textSize / 2);
             //label[5].visible = false;
-                
+
+            PlayerOne = new Player(SnakeHeadTexture, SnakeBodyTexture, 5);
+            Food = new Food(FoodTexture); 
 
 
 
@@ -237,6 +239,10 @@ namespace SnakeGameCSharp
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            PlayerOne.CheckSnakeFoodCollision(Food.BBFood);
+            PlayerOne.Update(gameTime);
+
+            
             // Allows the game to exit
             //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
             //    this.Exit();.
@@ -510,11 +516,11 @@ namespace SnakeGameCSharp
 
         //}
         
-        private void CheckSnakeMonsterCollision()
-        {
-            ///TODO: check for wall collions against the snake
+        //private void CheckSnakeMonsterCollision()
+        //{
+        //    ///TODO: check for wall collions against the snake
 
-        }
+        //}
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
@@ -547,6 +553,10 @@ namespace SnakeGameCSharp
             LMovement.Draw(spriteBatch);
             LGameOver.Draw(spriteBatch);
             LPaused.Draw(spriteBatch);
+
+
+            PlayerOne.Draw(spriteBatch);
+            Food.Draw(spriteBatch);
             //for (int i = 0; i <= SnakeLength - 1; i++)
             //{
             //    if (i==0)
@@ -569,20 +579,20 @@ namespace SnakeGameCSharp
 
 
 
-        private Vector2 RandomVector(ref Vector2 Vector)
-        {
-            do
-            {
-                Single RndNum = random.Next(10, 590);
-                Vector.X = (int)RndNum;
-            } while (Vector.X % 10 !=  0 );
-            do
-            {
-                Single RndNum = random.Next(10, 590);
-                Vector.Y = (int)(int)RndNum;
-            } while (Vector.Y % 10 != 0 );
-            return Vector;
-        }
+        //private Vector2 RandomVector(ref Vector2 Vector)
+        //{
+        //    do
+        //    {
+        //        Single RndNum = random.Next(10, 590);
+        //        Vector.X = (int)RndNum;
+        //    } while (Vector.X % 10 !=  0 );
+        //    do
+        //    {
+        //        Single RndNum = random.Next(10, 590);
+        //        Vector.Y = (int)(int)RndNum;
+        //    } while (Vector.Y % 10 != 0 );
+        //    return Vector;
+        //}
 
 
        

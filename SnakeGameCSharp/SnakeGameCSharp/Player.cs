@@ -85,12 +85,12 @@ namespace SnakeGameCSharp
             walls.Add(Bottom);            
             _Walls.AddRange(walls);
         }
-        private void CheckSnakeFoodCollision(BoundingBox Food)
+        public void CheckSnakeFoodCollision(BoundingBox Food)
         {
             ///TODO: check for food collisions against the snake
             if (SnakeHead.Intersects(Food))
             {
-                
+                GrowSnake();
             }
 
         }
@@ -118,7 +118,7 @@ namespace SnakeGameCSharp
 
         }
 
-        private void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             CheckRestart();
             if (!_dead)
@@ -131,11 +131,51 @@ namespace SnakeGameCSharp
 
 
                     UpdateInput();
+                    MoveSnake();
+
 
                 }
 
             }
+        } 
+        private void UpdateInput()
+        {
+            KeyboardState newState = Keyboard.GetState();
+            // Is the UP key down?
+            if (newState.IsKeyDown(Keys.Left))
+            {
+                // If not down last update, key has just been pressed.
+                if (!_oldState.IsKeyDown(Keys.Left))
+                {
+                    _Snake[0].Facing = 1;//Left
+                }
+            } if (newState.IsKeyDown(Keys.Up))
+            {
+                // If not down last update, key has just been pressed.
+                if (!_oldState.IsKeyDown(Keys.Up))
+                {
+                    _Snake[0].Facing = 2;//Up
+                }
+            }
+            if (newState.IsKeyDown(Keys.Right))
+            {
+                // If not down last update, key has just been pressed.
+                if (!_oldState.IsKeyDown(Keys.Right))
+                {
+                    _Snake[0].Facing = 3;//Right
+                }
+            }
+            if (newState.IsKeyDown(Keys.Down))
+            {
+                // If not down last update, key has just been pressed.
+                if (!_oldState.IsKeyDown(Keys.Down))
+                {
+                    _Snake[0].Facing = 4;//Down
+                }
+            }
+            _oldState = newState;
         }
+        
         private void CheckPause()
         {
             KeyboardState newState = Keyboard.GetState();
@@ -213,7 +253,7 @@ namespace SnakeGameCSharp
             }
 
             
-            for (int i = _Snake.Count - 1; i >= 1; i--)
+            for (int i = this.SnakeLength - 1; i >= 1; i--)
             {
                 _Snake[i].Position = _Snake[i - 1].Position;
                 _Snake[i].Facing = _Snake[i - 1].Facing;
@@ -226,43 +266,7 @@ namespace SnakeGameCSharp
             _Snake[this.SnakeLength].Position = _Snake[this.SnakeLength - 1].Position;
             _Snake[this.SnakeLength].Facing = _Snake[this.SnakeLength - 1].Facing;
         }
-        private void UpdateInput()
-        {
-            KeyboardState newState = Keyboard.GetState();
-            // Is the UP key down?
-            if (newState.IsKeyDown(Keys.Left))
-            {
-                // If not down last update, key has just been pressed.
-                if (!_oldState.IsKeyDown(Keys.Left))
-                {
-                    _Snake[0].Facing = 1;//Left
-                }
-            } if (newState.IsKeyDown(Keys.Up))
-            {
-                // If not down last update, key has just been pressed.
-                if (!_oldState.IsKeyDown(Keys.Up))
-                {
-                    _Snake[0].Facing = 2;//Up
-                }
-            }
-            if (newState.IsKeyDown(Keys.Right))
-            {
-                // If not down last update, key has just been pressed.
-                if (!_oldState.IsKeyDown(Keys.Right))
-                {
-                    _Snake[0].Facing = 3;//Right
-                }
-            }
-            if (newState.IsKeyDown(Keys.Down))
-            {
-                // If not down last update, key has just been pressed.
-                if (!_oldState.IsKeyDown(Keys.Down))
-                {
-                    _Snake[0].Facing = 4;//Down
-                }
-            }
-            _oldState = newState;
-        }
+       
 
         private void CheckSnakeWallCollision()
         {
@@ -323,6 +327,19 @@ namespace SnakeGameCSharp
 
             //}
 
+        }
+        
+        public void Draw(SpriteBatch spriteBatch)
+        {
+      
+
+            for (int i = 0; i <= this.SnakeLength - 1; i++)
+            {
+                if (i == 0)
+                    spriteBatch.Draw(_SnakeHeadTexture, _Snake[i].Position, Color.Transparent);
+                else
+                    spriteBatch.Draw(_SnakeBodyTexture, _Snake[i].Position, Color.Transparent);
+            }
         }
     }
 }
