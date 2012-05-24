@@ -199,9 +199,10 @@ namespace SnakeGameCSharp
             LArrow = new Label(new Vector2(610, (10 + (15 * 4))), "Arrow Keys:", ControlFont);
             LMovement = new Label(new Vector2(610, (10 + (15 * 5))), "Movement", ControlFont);
 
-            textCenter = new Vector2(GraphicsDevice.Viewport.Width / 2, 50f);
+            textCenter = new Vector2(GraphicsDevice.Viewport.Width / 2, 300f);
             LGameOver = new Label((textCenter - (LargeFont.MeasureString("GAME OVER") / 2)), "GAME OVER", LargeFont, false, Color.Crimson);
             LPaused = new Label((textCenter - (LargeFont.MeasureString("PAUSED") / 2)), "PAUSED", LargeFont, false, Color.Crimson);
+            
    //label[0].text = "Controls";
             //label[1].text = "R-Restart";
             //label[2].text = "P-Pause";
@@ -272,7 +273,7 @@ namespace SnakeGameCSharp
         private Player NewPlayer(ref Player NewPlayer)
         {
             NewPlayer = new Player(SnakeHeadTexture, SnakeBodyTexture, 5);
-            NewPlayer.AddEdges(leftWall.BBox, topWall.BBox, rightWall.BBox, bottomWall.BBox);
+            NewPlayer.AddEdges(leftWall.BBox, topWall.BBox, rightWall.BBox2, bottomWall.BBox2);
 
             Food = new Food(FoodTexture);
             return NewPlayer;
@@ -506,7 +507,7 @@ namespace SnakeGameCSharp
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.White);
-            spriteBatch.Begin(SpriteSortMode.Deferred,BlendState.AlphaBlend);
+            spriteBatch.Begin(SpriteSortMode.BackToFront,BlendState.AlphaBlend);
             topWall.Draw(spriteBatch);
             bottomWall.Draw(spriteBatch);
             leftWall.Draw(spriteBatch);
@@ -523,7 +524,19 @@ namespace SnakeGameCSharp
             //        spriteBatch.DrawString(ControlFont, label[i].text, label[i].vector, label[i].color);
             //    }
 
-            //}
+            //} 
+            if (PlayerOne.Dead)
+            {
+                LGameOver.Visible = true;
+            }
+            else
+            {
+                LGameOver.Visible = false;
+                if (PlayerOne.Paused)
+                    LPaused.Visible = true;
+                else
+                    LPaused.Visible = false;
+            }
             LControls.Draw(spriteBatch);
             LRestart.Draw(spriteBatch);
             LPause.Draw(spriteBatch);
@@ -532,9 +545,13 @@ namespace SnakeGameCSharp
             LGameOver.Draw(spriteBatch);
             LPaused.Draw(spriteBatch);
 
-
+           
             PlayerOne.Draw(spriteBatch);
+            //spriteBatch.Draw(FoodTexture, Food._location, null, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0f);
+
             Food.Draw(spriteBatch);
+
+
             //for (int i = 0; i <= SnakeLength - 1; i++)
             //{
             //    if (i==0)

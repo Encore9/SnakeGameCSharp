@@ -47,7 +47,8 @@ namespace SnakeGameCSharp
         {
             if (_visible == true)
             {
-                spriteBatch.DrawString(_font,_text, _vector, _color);
+                spriteBatch.DrawString(_font,_text, _vector, _color,0,Vector2.Zero,1,SpriteEffects.None, 0.0f);
+                //spriteBatch.DrawString(_font, _text, _vector, _color);
             }
         }
         public Vector2 Position

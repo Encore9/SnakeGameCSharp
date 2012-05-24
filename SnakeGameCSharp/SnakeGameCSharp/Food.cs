@@ -14,7 +14,7 @@ namespace SnakeGameCSharp
 {
     public class Food
     {
-        private Vector2 _location= Vector2.Zero;
+        public Vector2 _location= Vector2.Zero;
         private Texture2D _texture;
         private Random random = new Random();
         public Food(Texture2D FoodTexture)
@@ -24,7 +24,8 @@ namespace SnakeGameCSharp
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, _location, Color.White);
+            spriteBatch.Draw(_texture, _location,null, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, .2f);
+            //spriteBatch.Draw(_texture, _location, Color.Green);
         }
         public float X
         {

@@ -39,7 +39,7 @@ namespace SnakeGameCSharp
         
         private bool _dead = false;
         private bool _paused = false;
-        //private bool pauseKeyDown = false;
+        private bool pauseKeyDown = false;
         private bool pausedForGuide = false;
 
 
@@ -94,6 +94,20 @@ namespace SnakeGameCSharp
                 return true;
             }
             return false;
+        }
+        public bool Paused
+        {
+            get
+            {
+                return _paused;
+            }
+        }
+        public bool Dead
+        {
+            get
+            {
+                return _dead;
+            }
         }
 
         private void StartUp()
@@ -178,18 +192,27 @@ namespace SnakeGameCSharp
         
         private void CheckPause()
         {
-            KeyboardState newState = Keyboard.GetState();
-            if (newState.IsKeyDown(Keys.P))
+            KeyboardState newState = Keyboard.GetState();            
+            bool pauseKeyDownThisFrame = (newState.IsKeyDown(Keys.P));
+            // If key was not down before, but is down now, we toggle the
+            // pause setting
+            if (!pauseKeyDown && pauseKeyDownThisFrame)
             {
-                // If not down last update, key has just been pressed.
-                if (!_oldState.IsKeyDown(Keys.P))
-                {
-                    if (!_paused)
-                        BeginPause(true);
-                    else
-                        EndPause();
-                }
+                if (!_paused)
+                    BeginPause(true);
+                else
+                    EndPause();                
             }
+            pauseKeyDown = pauseKeyDownThisFrame;
+
+            //// Pause if the Guide is up
+            //if (!_paused && Guide.IsVisible)
+            //    BeginPause(false);
+            //// If we paused for the guide, unpause if the guide
+            //// went away
+            //else if (_paused && pausedForGuide && !Guide.IsVisible)
+            //    EndPause();
+                       
         }
         
         private void BeginPause(bool UserInitiated)
@@ -264,7 +287,8 @@ namespace SnakeGameCSharp
             {
                 if (SnakeHead.Intersects(CurrentBBOX))
                 {
-
+                    Vector3 max=CurrentBBOX.Max;
+                    Vector3 min = CurrentBBOX.Min;
                     _paused = true;
                     _dead = true;
 
@@ -322,9 +346,11 @@ namespace SnakeGameCSharp
             for (int i = 0; i <= this.SnakeLength - 1; i++)
             {
                 if (i == 0)
-                    spriteBatch.Draw(_SnakeHeadTexture, _Snake[i].Position, Color.Blue);
+                    spriteBatch.Draw(_SnakeHeadTexture, _Snake[i].Position, null, Color.Blue, 0, Vector2.Zero, 1, SpriteEffects.None, .1f);
+                //spriteBatch.Draw(_SnakeHeadTexture, _Snake[i].Position,Color.White);
                 else
-                    spriteBatch.Draw(_SnakeBodyTexture, _Snake[i].Position, Color.Red);
+                    spriteBatch.Draw(_SnakeBodyTexture, _Snake[i].Position, null, Color.Red, 0, Vector2.Zero, 1, SpriteEffects.None, .3f);
+                //spriteBatch.Draw(_SnakeBodyTexture, _Snake[i].Position, Color.White);
             }
         }
     }
