@@ -23,24 +23,16 @@ namespace SnakeGameCSharp
         private bool _Playerone = true;
         private int _Score;
         List<SnakePart> _Snake = new List<SnakePart>();
-        //snakePart[] Snake = new snakePart[99];
+
         private Vector2 _SnakeXSpeed = new Vector2(10, 0);
         private Vector2 _SnakeYSpeed = new Vector2(0, 10);
-        //private struct snakePart
-        //{
-        //    public Vector2 position;
-        //    public int facing;
-        //};
+
         List<BoundingBox> _Walls = new List<BoundingBox>();
-        //BoundingBox BBLeftWall = new BoundingBox(new Vector3(1, 1, 0), new Vector3(9, 599, 0));
-        //BoundingBox BBTopWall = new BoundingBox(new Vector3(1, 1, 0), new Vector3(599, 9, 0));
-        //BoundingBox BBRightWall = new BoundingBox(new Vector3(591, 1, 0), new Vector3(599, 599, 0));
-        //BoundingBox BBBottomWall = new BoundingBox(new Vector3(1, 591, 0), new Vector3(599, 599, 0));
         
         private bool _dead = false;
         private bool _paused = false;
-        private bool pauseKeyDown = false;
-        private bool pausedForGuide = false;
+        private bool _pauseKeyDown = false;
+        private bool _pausedForGuide = false;
 
 
         public Player(Texture2D SnakeHeadTexture, Texture2D SnakeBodyTexture, int InitialLength)
@@ -89,11 +81,9 @@ namespace SnakeGameCSharp
         {
             ///TODO: check for food collisions against the snake
             if (SnakeHead.Intersects(Food))
-            {
-                GrowSnake();
-                return true;
-            }
-            return false;
+                return GrowSnake();
+            else
+                return false;
         }
         public bool Paused
         {
@@ -109,7 +99,7 @@ namespace SnakeGameCSharp
                 return _dead;
             }
         }
-
+        //Start up code for creating the snake parts
         private void StartUp()
         {
             _oldState = Keyboard.GetState();
@@ -122,36 +112,33 @@ namespace SnakeGameCSharp
             {
                 SnakePart part = new SnakePart(new Vector2(120 - (10 * i), 120), 3);
                  _Snake.Add(part);
-                //_Snake[i].Position = new Vector2(120 - (10 * i), 120);
-                //_Snake[i].Facing = 3;
             }
 
 
             _paused = false;
-            //pauseKeyDown = false;
-            pausedForGuide = false;
+            _pauseKeyDown = false;
+            _pausedForGuide = false;
 
         }
-
+        /// <summary>
+        /// Updates the snake class
+        /// </summary>
+        /// <param name="gameTime">Gametime refrence</param>
         public void Update(GameTime gameTime)
         {
           if (!_dead)
             {
                 CheckPause();
                 CheckSnakeWallCollision();
-                //CheckSnakeFoodCollision();
                 if (!_paused)
                 {
-
-
-                    UpdateInput();
-                    MoveSnake();
-
-
+                   UpdateInput();
+                   MoveSnake();
                 }
-
-            }
+              }
         } 
+
+        //Checks for the Arrow keys to change the snakes facing position
         private void UpdateInput()
         {
             KeyboardState newState = Keyboard.GetState();
@@ -196,14 +183,14 @@ namespace SnakeGameCSharp
             bool pauseKeyDownThisFrame = (newState.IsKeyDown(Keys.P));
             // If key was not down before, but is down now, we toggle the
             // pause setting
-            if (!pauseKeyDown && pauseKeyDownThisFrame)
+            if (!_pauseKeyDown && pauseKeyDownThisFrame)
             {
                 if (!_paused)
                     BeginPause(true);
                 else
                     EndPause();                
             }
-            pauseKeyDown = pauseKeyDownThisFrame;
+            _pauseKeyDown = pauseKeyDownThisFrame;
 
             //// Pause if the Guide is up
             //if (!_paused && Guide.IsVisible)
@@ -218,9 +205,7 @@ namespace SnakeGameCSharp
         private void BeginPause(bool UserInitiated)
         {
             _paused = true;
-            pausedForGuide = !UserInitiated;
-            //label[6].visible = true;
-
+            _pausedForGuide = !UserInitiated;
             //TODO: Pause audio playback
             //TODO: Pause controller vibration
         }
@@ -228,10 +213,10 @@ namespace SnakeGameCSharp
         {
             //TODO: Resume audio
             //TODO: Resume controller vibration
-            pausedForGuide = false;
+            _pausedForGuide = false;
             _paused = false;
-            //label[6].visible = false;
         }
+        //Moves the snake's head and the other parts follow along
         private void MoveSnake()
         {        
             for (int i = this.SnakeLength - 1; i >= 1; i--)
@@ -266,23 +251,26 @@ namespace SnakeGameCSharp
             
 
         }
-        private void GrowSnake()
+        /// <summary>
+        /// Makes the snake grow bigger!
+        /// </summary>
+        /// <returns></returns>
+        private bool GrowSnake()
         {
             
             SnakePart part = new SnakePart(_Snake[this.SnakeLength - 1].Position, _Snake[this.SnakeLength - 1].Facing);
             _Snake.Add(part);
             this.SnakeLength += 1;
-            //_Snake[this.SnakeLength].Position = _Snake[this.SnakeLength - 1].Position;
-            //_Snake[this.SnakeLength].Facing = _Snake[this.SnakeLength - 1].Facing;
+            return true;
+            
         }
        
-
+        /// <summary>
+        /// Checkes for a collision with the wall
+        /// </summary>
         private void CheckSnakeWallCollision()
         {
-            ///TODO: check for wall collions against the snake
-            ///
-            //BoundingBox BBSnake = new BoundingBox(new Vector3(_Snake[0].X + 1, _Snake[0].Y + 1, 0),
-            //                                      new Vector3(_Snake[0].X + 9, _Snake[0].Y + 9, 0));
+            
             _Walls.ForEach(delegate(BoundingBox CurrentBBOX)
             {
                 if (SnakeHead.Intersects(CurrentBBOX))
@@ -294,63 +282,19 @@ namespace SnakeGameCSharp
 
                 }
              });
-            //switch (_Snake[0].Facing)
-            //{
-            //    case 1:
-
-            //        if (SnakeHead.Intersects(BBLeftWall))
-            //        {
-
-            //            paused = true;
-            //            gameover = true;
-
-            //        }
-            //        break;
-            //    case 2:
-
-            //        if (SnakeHead.Intersects(BBTopWall))
-            //        {
-
-            //            paused = true;
-            //            gameover = true;
-            //        }
-            //        break;
-            //    case 3:
-
-
-            //        if (SnakeHead.Intersects(BBRightWall))
-            //        {
-
-            //            paused = true;
-            //            gameover = true;
-            //        }
-            //        break;
-            //    case 4:
-
-            //        if (SnakeHead.Intersects(BBBottomWall))
-            //        {
-
-            //            paused = true;
-            //            gameover = true;
-            //        }
-            //        break;
-
-            //}
-
         }
-        
+        /// <summary>
+        /// Draws all parts of the snake.
+        /// </summary>
+        /// <param name="spriteBatch">SpriteBatch used to draw the snake sprites.</param>
         public void Draw(SpriteBatch spriteBatch)
         {
-      
-
             for (int i = 0; i <= this.SnakeLength - 1; i++)
             {
                 if (i == 0)
                     spriteBatch.Draw(_SnakeHeadTexture, _Snake[i].Position, null, Color.Blue, 0, Vector2.Zero, 1, SpriteEffects.None, .1f);
-                //spriteBatch.Draw(_SnakeHeadTexture, _Snake[i].Position,Color.White);
                 else
                     spriteBatch.Draw(_SnakeBodyTexture, _Snake[i].Position, null, Color.Red, 0, Vector2.Zero, 1, SpriteEffects.None, .3f);
-                //spriteBatch.Draw(_SnakeBodyTexture, _Snake[i].Position, Color.White);
             }
         }
     }

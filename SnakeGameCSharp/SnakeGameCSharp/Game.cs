@@ -27,19 +27,7 @@ namespace SnakeGameCSharp
 
         Texture2D SnakeBodyTexture;
         Texture2D SnakeHeadTexture;
-//int SnakeLength = 5;
-//// int Score = 0;
-//snakePart[] Snake = new snakePart[99];
-//public Vector2 SnakeXSpeed = new Vector2(10, 0);
-//        public Vector2 SnakeYSpeed = new Vector2(0, 10);
-//struct snakePart
-//        {
-//            public Vector2 position;
-//            public int facing;
-//           // public BoundingBox BBox;
-            
 
-//        };
 
         Texture2D MonsterTexture;
         Texture2D FoodTexture;
@@ -48,18 +36,10 @@ namespace SnakeGameCSharp
         Food Food;
        
 
-        
-        //MonsterPart Monster;
-        //Labels[] label = new Labels[7];
+    
 
         
-        //public Food Food;
-        
 
-        
-        public Vector2 MonsterXSpeed = new Vector2(10,0);
-        public Vector2 MonsterYSpeed = new Vector2(0, 10);
-        Random random = new Random();
 
         Label LControls;
         Label LRestart;
@@ -77,37 +57,10 @@ namespace SnakeGameCSharp
         Wall leftWall;
         Wall rightWall;
 
-        //bool first = true;
-        //bool gameover = false;
-       // private bool paused = false;
-       // private bool pauseKeyDown = false;
-        //private bool pausedForGuide = false;
+  
 
 
-        /// <summary>
-        /// This structure defines the basic properties for the labels
-        /// used in this game. Most of them will for displaying score and 
-        /// debug info if needed.
-        /// <para name="vector">The vector cordinates of the label</para>
-        /// <para name="visible">Used to determine the visibility of the label</para>
-        /// <para name ="text">The text that the label will display</para>
-        /// <para name="color">The color of the output text</para>
-        /// </summary>
-        //struct Labels
-        //{
-        //    public Vector2 vector;
-        //    public bool visible;
-        //    public string text;
-        //    public Color color;
-        //};
 
-        
-        //struct MonsterPart
-        //{
-            
-        //    public Vector2 position;
-        //    public int facing;
-        //};
 
         public Game()
         {
@@ -170,7 +123,7 @@ namespace SnakeGameCSharp
         /// </summary>
         /// 
 
-
+       
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
@@ -203,22 +156,9 @@ namespace SnakeGameCSharp
             LGameOver = new Label((textCenter - (LargeFont.MeasureString("GAME OVER") / 2)), "GAME OVER", LargeFont, false, Color.Crimson);
             LPaused = new Label((textCenter - (LargeFont.MeasureString("PAUSED") / 2)), "PAUSED", LargeFont, false, Color.Crimson);
             
-   //label[0].text = "Controls";
-            //label[1].text = "R-Restart";
-            //label[2].text = "P-Pause";
-            //label[3].text = "Arrow Keys:";
-            //label[4].text = "Movement";
-            
-            //label[5].color = Color.Crimson;
-            //label[5].text = "GAME OVER";
-            
 
-            //label[5].vector = textCenter - (textSize / 2);
-            //label[5].visible = false;
             NewPlayer(ref PlayerOne);
-            //PlayerOne = new Player(SnakeHeadTexture, SnakeBodyTexture, 5);
-            //PlayerOne.AddEdges(leftWall.BBox, topWall.BBox, rightWall.BBox, bottomWall.BBox);
-            //Food = new Food(FoodTexture); 
+
 
 
 
@@ -514,17 +454,7 @@ namespace SnakeGameCSharp
             rightWall.Draw(spriteBatch);
             
            
-            //for (int i = 0; i <= label.Length-1; i++)
-            //{
-            //    if (label[i].visible == true)
-            //    {
-            //        if (i==5 || i==6)
-            //        spriteBatch.DrawString(LargeFont, label[i].text, label[i].vector, label[i].color);
-            //            else
-            //        spriteBatch.DrawString(ControlFont, label[i].text, label[i].vector, label[i].color);
-            //    }
 
-            //} 
             if (PlayerOne.Dead)
             {
                 LGameOver.Visible = true;
@@ -547,49 +477,13 @@ namespace SnakeGameCSharp
 
            
             PlayerOne.Draw(spriteBatch);
-            //spriteBatch.Draw(FoodTexture, Food._location, null, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0f);
-
             Food.Draw(spriteBatch);
 
 
-            //for (int i = 0; i <= SnakeLength - 1; i++)
-            //{
-            //    if (i==0)
-            //        spriteBatch.Draw(SnakeHead, Snake[i].position, Color.Transparent);
-            //    else
-            //        spriteBatch.Draw(SnakeTexture, Snake[i].position, Color.White);
-            //}
-            ////spriteBatch.Draw(MonsterTexture, Monster.position, Color.Black);
-            //spriteBatch.Draw(FoodTexture, Food, Color.White);
-            //spriteBatch.Draw(SnakeHead, Snake[0].position,Color.White);
-            spriteBatch.End();
-            // TODO: Add your drawing code here
-            //TargetElapsedTime = new TimeSpan(0, 0, 0, 0, 90);
+            
             base.Draw(gameTime);
 
         }
-
-
-      
-
-
-
-        //private Vector2 RandomVector(ref Vector2 Vector)
-        //{
-        //    do
-        //    {
-        //        Single RndNum = random.Next(10, 590);
-        //        Vector.X = (int)RndNum;
-        //    } while (Vector.X % 10 !=  0 );
-        //    do
-        //    {
-        //        Single RndNum = random.Next(10, 590);
-        //        Vector.Y = (int)(int)RndNum;
-        //    } while (Vector.Y % 10 != 0 );
-        //    return Vector;
-        //}
-
-
-       
+   
     }
 }
