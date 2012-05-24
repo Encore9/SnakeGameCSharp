@@ -121,8 +121,7 @@ namespace SnakeGameCSharp
 
         public void Update(GameTime gameTime)
         {
-            CheckRestart();
-            if (!_dead)
+          if (!_dead)
             {
                 CheckPause();
                 CheckSnakeWallCollision();
@@ -192,26 +191,7 @@ namespace SnakeGameCSharp
                 }
             }
         }
-        private void CheckRestart()
-        {
-
-            KeyboardState newState = Keyboard.GetState();
-            if (newState.IsKeyDown(Keys.Escape))
-            {
-
-                //Exit();
-
-            }
-            if (newState.IsKeyDown(Keys.R))
-            {
-                // If not down last update, key has just been pressed.
-                if (!_oldState.IsKeyDown(Keys.R))
-                {
-
-                    StartUp();
-                }
-            }
-        }
+        
         private void BeginPause(bool UserInitiated)
         {
             _paused = true;

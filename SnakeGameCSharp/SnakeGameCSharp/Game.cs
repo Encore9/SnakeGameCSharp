@@ -22,8 +22,8 @@ namespace SnakeGameCSharp
         SpriteFont ControlFont;
         SpriteFont LargeFont;
 
-        
-//        KeyboardState oldState;
+
+        KeyboardState oldState;
 
         Texture2D SnakeBodyTexture;
         Texture2D SnakeHeadTexture;
@@ -214,10 +214,10 @@ namespace SnakeGameCSharp
 
             //label[5].vector = textCenter - (textSize / 2);
             //label[5].visible = false;
-
-            PlayerOne = new Player(SnakeHeadTexture, SnakeBodyTexture, 5);
-            PlayerOne.AddEdges(leftWall.BBox, topWall.BBox, rightWall.BBox, bottomWall.BBox);
-            Food = new Food(FoodTexture); 
+            NewPlayer(ref PlayerOne);
+            //PlayerOne = new Player(SnakeHeadTexture, SnakeBodyTexture, 5);
+            //PlayerOne.AddEdges(leftWall.BBox, topWall.BBox, rightWall.BBox, bottomWall.BBox);
+            //Food = new Food(FoodTexture); 
 
 
 
@@ -240,68 +240,44 @@ namespace SnakeGameCSharp
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            CheckRestart();
             if (PlayerOne.CheckSnakeFoodCollision(Food.BBFood))
                 Food = new Food(FoodTexture);
             PlayerOne.Update(gameTime);
+            // TODO: Add your update logic here
 
-            
-            // Allows the game to exit
-            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-            //    this.Exit();.
-            //CheckRestart();
-            //if (!gameover)
-            //{
-            //CheckPause();
-            //CheckSnakeWallCollision();
-            //CheckSnakeFoodCollision();
-            //    if (!paused)
-            //    {
-            
-            //UpdateText();
-            //    UpdateInput();
-                
-                
-                 
-                //if (Snake[0].facing == 1)
-                //{
-                //    Snake[0].position -= SnakeXSpeed;
-                //    //Snake[0].BBox = new BoundingBox(new Vector3(Snake[0].position.X, Snake[0].position.Y, 0),
-                //    //             new Vector3(Snake[0].position.X + 10, Snake[0].position.Y + 10, 0));
-                //}
-                //else if (Snake[0].facing == 2)
-                //{
-                //    Snake[0].position -= SnakeYSpeed;
-                //    //Snake[0].BBox = new BoundingBox(new Vector3(Snake[0].position.X, Snake[0].position.Y, 0),
-                //    //               new Vector3(Snake[0].position.X + 10, Snake[0].position.Y + 10, 0));
-                //}
-                //else if (Snake[0].facing == 3)
-                //{
-                //    Snake[0].position += SnakeXSpeed;
-                //    //Snake[0].BBox = new BoundingBox(new Vector3(Snake[0].position.X, Snake[0].position.Y, 0),
-                //    //              new Vector3(Snake[0].position.X + 10, Snake[0].position.Y + 10, 0));
-                //}
-                //else if (Snake[0].facing == 4)
-                //{
-                //    Snake[0].position += SnakeYSpeed;
-                //    // Snake[0].BBox = new BoundingBox(new Vector3(Snake[0].position.X, Snake[0].position.Y, 0),
-                //    //               new Vector3(Snake[0].position.X + 10, Snake[0].position.Y + 10, 0));
+            base.Update(gameTime);
+        }
+        private void CheckRestart()
+        {
 
-                //}
-                ////Snake[0].position += SnakeSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                //for (int i = SnakeLength - 1; i >= 1; i--)
-                //{
-                //    Snake[i].position = Snake[i - 1].position;
-                //    Snake[i].facing = Snake[i - 1].facing;
-                //    //Snake[i].BBox = new BoundingBox(new Vector3(Snake[i].position.X, Snake[i].position.Y, 0),
-                //    //new Vector3(Snake[i].position.X + 10, Snake[i].position.Y + 10, 0));
-                //}
+            KeyboardState newState = Keyboard.GetState();
+            if (newState.IsKeyDown(Keys.Escape))
+            {
 
-                // TODO: Add your update logic here
+                Exit();
 
-                base.Update(gameTime);
-            } 
-        
-        
+            }
+            if (newState.IsKeyDown(Keys.R))
+            {
+                // If not down last update, key has just been pressed.
+                if (!oldState.IsKeyDown(Keys.R))
+                {
+
+                    NewPlayer(ref PlayerOne);
+
+                }
+            }
+        }
+        private Player NewPlayer(ref Player NewPlayer)
+        {
+            NewPlayer = new Player(SnakeHeadTexture, SnakeBodyTexture, 5);
+            NewPlayer.AddEdges(leftWall.BBox, topWall.BBox, rightWall.BBox, bottomWall.BBox);
+
+            Food = new Food(FoodTexture);
+            return NewPlayer;
+
+        }
 
         //private void BeginPause(bool UserInitiated)
         //{
