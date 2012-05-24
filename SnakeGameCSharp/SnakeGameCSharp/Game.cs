@@ -479,7 +479,7 @@ namespace SnakeGameCSharp
             PlayerOne.Draw(spriteBatch);
             Food.Draw(spriteBatch);
 
-
+            spriteBatch.End();
             
             base.Draw(gameTime);
 
